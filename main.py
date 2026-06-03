@@ -80,6 +80,8 @@ def parse_date(raw, field_hint: str = "") -> tuple[date | None, str | None]:
     if isinstance(raw, (datetime, date)):
         return raw.date() if isinstance(raw, datetime) else raw, None
     s = str(raw).strip()
+    # 去除「民國」前綴，如「民國76/4/1」→「76/4/1」
+    s = re.sub(r'^民國\s*', '', s)
     m = DATE_RE.match(s)
     if not m:
         return None, f"無法解析日期格式：{s!r}"
